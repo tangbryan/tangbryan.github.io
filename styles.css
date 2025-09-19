@@ -1,0 +1,345 @@
+/* Main styles for Bryan Tang portfolio */
+:root {
+    --bg1: #0f172a;
+    --bg2: #081029;
+    --accent: #6ee7b7;
+    --muted: #9aa4b2;
+    --glass: rgba(255, 255, 255, 0.06);
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    color: #e6eef8;
+    background: linear-gradient(180deg, var(--bg1), var(--bg2));
+    -webkit-font-smoothing: antialiased
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(6px);
+}
+
+.brand {
+    display: flex;
+    gap: 14px;
+    align-items: center
+}
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #60a5fa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #04263b;
+    font-size: 20px
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 1px
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px
+}
+
+/* Larger brand for higher impact */
+.brand h1 {
+    font-size: 26px
+}
+
+.avatar {
+    width: 88px;
+    height: 88px;
+    font-size: 26px
+}
+
+.tabs {
+    display: flex;
+    gap: 8px
+}
+
+.tab {
+    background: transparent;
+    border: 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    font-weight: 600
+}
+
+.tab.active {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    color: var(--accent);
+    box-shadow: 0 4px 18px rgba(12, 18, 30, 0.6)
+}
+
+.container {
+    max-width: 1100px;
+    margin: 28px auto;
+    padding: 0 20px
+}
+
+.panel {
+    display: none;
+    padding: 18px
+}
+
+.panel.active {
+    display: block
+}
+
+.hero-fullscreen {
+  min-height: 100vh;           /* Make it fill the full screen height */
+  display: flex;                /* Enable flexbox */
+  justify-content: center;      /* Center horizontally */
+  align-items: center;           /* Center vertically */
+  text-align: center;            /* Center the text itself */
+}
+
+.hero-text {
+  width: 100%;
+  max-width: 800px;              /* Optional: keep text from getting too wide */
+}
+
+.hero-center {
+    text-align: center
+}
+
+.hero-text.hero-center {
+    max-width: 900px;
+    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 28px;
+    align-items: start
+}
+
+.hero-text h2 {
+    margin: 0 0 10px 0;
+    font-size: 40px
+}
+
+.display-4 {
+    font-size: 48px;
+    font-weight: 700
+}
+
+.hero-text p {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 16px
+}
+
+.hero-card {
+    background: var(--glass);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 8px 30px rgba(2, 6, 23, 0.6)
+}
+
+.photo-frame {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0ea5a7, #60a5fa);
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.95
+}
+
+/* Resume embed larger and responsive */
+.resume-embed {
+    height: 1100px;
+    border-radius: 8px;
+    border: 0
+}
+
+@media (max-width:880px) {
+    .resume-embed {
+        height: 800px
+    }
+
+    .display-4 {
+        font-size: 34px
+    }
+}
+
+.quick-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13px
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #04263b;
+    text-decoration: none;
+    font-weight: 700;
+    margin-right: 8px
+}
+
+.btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--muted)
+}
+
+.horizontal-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 12px 4px;
+    scroll-snap-type: x proximity
+}
+
+.horizontal-scroll:focus {
+    outline: 2px solid rgba(110, 231, 183, 0.12)
+}
+
+.card {
+    min-width: 280px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(2, 6, 23, 0.6);
+    scroll-snap-align: center
+}
+
+.card h4 {
+    margin: 0 0 8px 0
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px
+}
+
+.timeline {
+    display: grid;
+    gap: 12px
+}
+
+.entry {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    padding: 14px;
+    border-radius: 10px
+}
+
+.entry h4 {
+    margin: 0
+}
+
+.date {
+    color: var(--muted);
+    font-size: 13px
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+    color: var(--muted)
+}
+
+.contact-list a {
+    color: var(--accent)
+}
+
+.muted {
+    color: var(--muted)
+}
+
+/* Custom scrollbar */
+.horizontal-scroll::-webkit-scrollbar {
+    height: 10px
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+    background: transparent
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #60a5fa, #6ee7b7);
+    border-radius: 999px
+}
+
+/* Responsive */
+@media (max-width:880px) {
+    .hero {
+        grid-template-columns: 1fr
+    }
+
+    .hero-card {
+        order: -1
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr
+    }
+}
+
+/* small interactive focus */
+.tab:focus {
+    outline: 2px solid rgba(110, 231, 183, 0.18)
+}
+
+.card:focus {
+    outline: 2px solid rgba(96, 165, 250, 0.14)
+}
+
+.hero-text .lead {
+  font-size: 1.75rem; /* default is ~1.25rem */
+  font-weight: 500;   /* optional: makes it stand out more */
+  line-height: 1.6;   /* optional: more readable */
+}
+
+.hero-text .display-4 {
+  font-size: 4rem;       /* make it much bigger (~64px) */
+  font-weight: 700;      /* optional: bolder */
+  line-height: 1.2;      /* tighter spacing */
+}

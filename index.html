@@ -1,27 +1,217 @@
-<!DOCTYPE html>
-<style>
-    h1 {
-        font-family:'Times New Roman', Times, serif;
-        font-size:200%;
-        color:gray;
-    }
-</style>
-<html>
-    <Header>
-        <center>
-            <h1>
-                BRYAN TANG
-            </h1>
-        </center>
-    </Header>
-    <body>
-        <p>
-            <center>
-            Student at the University of Texas at Austin pursuing a Bachelors of Science in 
-            Computer Science. Interested in AI and its applications in industry (chatbot coming 
-            soon!). 
-            </center>
-        </p>
-        <button onclick="window.location.href='resume.html'">Resume</button>
-    </body>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bryan Tang — Software Engineer</title>
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUa6mY5y3X1s7n6bGgXQ1Xh0w5r1Zl1c3m5Y5p1f1c3k3G5v6f7h8i9j0k1l" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="avatar" id="avatarPlaceholder">BT</div>
+            <div>
+                <h1>BRYAN TANG</h1>
+                <p class="subtitle">B.S. Computer Science & Mathematics — UT Austin · Software Engineer</p>
+            </div>
+        </div>
+        <nav class="tabs" role="tablist" aria-label="Main">
+            <button class="tab active" data-target="about" role="tab" aria-selected="true">About</button>
+            <button class="tab" data-target="projects" role="tab">Projects</button>
+            <button class="tab" data-target="experience" role="tab">Experience</button>
+            <button class="tab" data-target="skills" role="tab">Skills</button>
+            <button class="tab" data-target="contact" role="tab">Contact</button>
+            <button class="tab" data-target="resume" role="tab">Resume</button>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- About -->
+        <section id="about" class="panel active hero-full" role="tabpanel">
+            <div class="hero hero-fullscreen">
+                <div class="hero-text">
+                    <h1 class="display-4">Hello — I'm Bryan</h1>
+                    <p class="lead">
+                        I'm a Junior at the University of Texas at Austin pursuing a B.S. in
+                        Computer Science and Mathematics. Currently a Software Engineering Intern
+                        at Hewlett Packard Enterprise, I build systems and tools that
+                        automate work and turn data into actionable insights.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Projects -->
+        <section id="projects" class="panel" role="tabpanel">
+            <h3>Selected Projects</h3>
+            <div class="horizontal-scroll" tabindex="0" aria-label="Projects carousel">
+                <article class="card">
+                    <h4>PISTASH-io Shell</h4>
+                    <p>C, C++</p>
+                    <ul>
+                        <li>Created a POSIX-compliant shell that supports 30+ commands, scripting, redirection,
+                            pipelining, and variables.
+                        </li>
+                        <li>Implemented a custom tokenizer and abstract syntax tree to parse logical operators and
+                            enable short-circuiting.</li>
+                        <li>Implemented background process support using fork() and exec() System Calls, enabling
+                            concurrent process execution
+                            and improving responsiveness under load.</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h4>Life Insurance Calculator</h4>
+                    <p>React, Node.js, Express, Tailwind</p>
+                    <ul>
+                        <li>Developed a full-stack web application with a responsive React frontend and a
+                            Node.js/Express backend with REST
+                            API endpoints.</li>
+                        <li>Implemented efficient data validation and calculation logic on the backend, reducing server
+                            response time by 40%.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h4>Operating System</h4>
+                    <p>C, C++, x86</p>
+                    <ul>
+                        <li>Implemented a minimal Unix-like operating system kernel in C/C++ and x86 assembly.</li>
+                        <li>Implemented core OS components including process management, ELF binary loading, system call
+                            handling, memory
+                            management (VMM), synchronization primitives (semaphores, barriers), and basic file system
+                            support (ext2).</li>
+                    </ul>
+                </article>
+
+                <article class="card">
+                    <h4>Life Insurance Form Filler</h4>
+                    <p>Python</p>
+                    <ul>
+                        <li>Leveraged Selenium and undetected-chromedriver to navigate, log in, and autofill Nationwide
+                            Life Insurance
+                            applications, reducing manual entry time by 80%.
+                        <li>Designed a user-friendly GUI with Tkinter to securely collect login c
+                            redentials and Excel row data for form population.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section id="experience" class="panel" role="tabpanel">
+            <h3>Experience</h3>
+            <div class="timeline">
+                <div class="entry">
+                    <h4>Hewlett Packard Enterprise — Software Engineer Intern</h4>
+                    <span class="date">May 2025 - Present · Spring, TX</span>
+                    <ul>
+                        <li>Developed an open-source CLI tool in Go to query server information via the Redfish API,
+                            automating firmware
+                            vulnerability detection and improving efficiency by 300% compared to manual inspection
+                            workflows.</li>
+                        <li>Engineered 7 Cobra CLI commands to automate firmware auditing and validation, reducing
+                            auditing time by 40%.</li>
+                        <li>Architected a migration from a JSON datastore to an optimized SQLite database with advanced
+                            indexing, slashing
+                            firmware record lookup times by 65% and enhancing scalability for enterprise-level data
+                            processing.</li>
+                    </ul>
+                </div>
+                <div class="entry">
+                    <h4>Applied Research Laboratories — Software Engineer Intern</h4>
+                    <span class="date">Jan 2025 - May 2025 · Austin, TX</span>
+                    <ul>
+                        <li>Built a Java Swing application with asynchronous data fetching and JSON parsing to visualize
+                            real-time sensor data via
+                            REST API calls, cutting data retrieval time by 50%.</li>
+                        <li>Integrated geolocation mapping using a gRPC Middleware event listener, improving user
+                            decision-making accuracy in a
+                            maritime analytics tool.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="entry">
+                    <h4>PCOnline — Software Engineer Intern</h4>
+                    <span class="date">May 2024 - Aug 2024 · Newark, DE</span>
+                    <ul>
+                        <li>Designed a full-stack Python application with a Tkinter GUI to automate label generation for
+                            6000+ returned products, scaling warehouse reconciliation processes and improving tracking
+                            accuracy.
+                        </li>
+                        <li>Engineered automated UI testers using Selenium for inventory management tools, decreasing
+                            testing time by 200%.
+                        </li>
+                        <li>Extended a Bash script to support creating, restoring, and backing up PostgreSQL databases
+                            in Docker containers to
+                            automate testing environment creation.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills" class="panel" role="tabpanel">
+            <h3>Technical Skills</h3>
+            <div class="skills-grid">
+                <div>
+                    <h5>Languages</h5>
+                    <p>Python, Java, C, C++, Go, JavaScript, SQL, Bash, HTML/CSS</p>
+                </div>
+                <div>
+                    <h5>Technologies</h5>
+                    <p>Linux, Git, Docker, Kubernetes, REST, Redfish API, AWS, PostgreSQL, SQLite</p>
+                </div>
+                <div>
+                    <h5>Concepts</h5>
+                    <p>Full Stack Software Engineering, Systems, Machine Learning</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="panel" role="tabpanel">
+            <h3>Contact</h3>
+            <p>Austin, TX</p>
+            <ul class="contact-list">
+                <li>Email: <a href="mailto:bryantang@utexas.edu">bryantang@utexas.edu</a></li>
+                <li>Phone: 832-292-5912</li>
+                <li>LinkedIn: <a href="https://linkedin.com/in/tang-bryan"
+                        target="_blank">linkedin.com/in/tang-bryan</a></li>
+                <li>GitHub: <a href="https://github.com/tangbryan" target="_blank">github.com/tangbryan</a></li>
+            </ul>
+        </section>
+
+        <!-- Resume -->
+        <section id="resume" class="panel" role="tabpanel">
+            <p>
+                <a class="btn" href="Bryan_Tang_Resume.pdf" download>Download PDF</a>
+                <a class="btn" href="resume.png" download>Download PNG</a>
+            </p>
+            <div class="resume-frame">
+                <object data="Bryan_Tang_Resume.pdf" type="application/pdf" width="100%" height="1100"
+                    aria-label="Resume PDF">
+                </object>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bootstrap JS (for tabs, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Q2JyLvoJrFJRIh2WD0L/z9sGgUhS5mMz9GH9nqP2gHtDkZ52fyeTLM9H8HW45gkP"
+        crossorigin="anonymous"></script>
+
+    <!-- Your custom JS -->
+    <script src="script.js"></script>
+</body>
+
 </html>
