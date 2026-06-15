@@ -4,333 +4,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bryan Tang | Software Engineer</title>
+    <title>Bryan Tang — Software Engineer</title>
     <meta name="description"
-        content="Personal portfolio of Bryan Tang, Software Engineer and Computer Science student at UT Austin.">
+        content="Bryan Tang — Software Engineer and Computer Science & Mathematics student at UT Austin. Currently building a payment processor at Capital One.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%2300ff88'>BT</text></svg>">
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23a78bfa'>BT</text></svg>">
 </head>
 
 <body>
-    <div class="container main-container">
-        <header class="header">
-            <div class="container">
-                <a href="#" class="logo">bryantang</a>
-                <nav class="nav">
-                    <a href="#about" class="nav-link"><span>01.</span> About</a>
-                    <a href="#experience" class="nav-link"><span>02.</span> Experience</a>
-                    <a href="#projects" class="nav-link"><span>03.</span> Projects</a>
-                    <a href="#contact" class="nav-link"><span>04.</span> Contact</a>
-                    <a href="Bryan_Tang_Resume.pdf" class="btn btn-resume" download="Bryan_Tang_Resume.pdf">Resume</a>
-                </nav>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="glow glow-1" aria-hidden="true"></div>
+    <div class="glow glow-2" aria-hidden="true"></div>
+
+    <header class="header" id="header">
+        <div class="header-inner">
+            <a href="#top" class="logo">BT<span>.</span></a>
+            <nav class="nav" aria-label="Primary">
+                <a href="#about" class="nav-link"><span>01</span> About</a>
+                <a href="#experience" class="nav-link"><span>02</span> Experience</a>
+                <a href="#projects" class="nav-link"><span>03</span> Projects</a>
+                <a href="#contact" class="nav-link"><span>04</span> Contact</a>
+                <a href="Bryan_Tang_Resume.pdf" class="btn-resume" download="Bryan_Tang_Resume.pdf">Resume ↓</a>
+            </nav>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#about" class="nav-link"><span>01</span> About</a>
+            <a href="#experience" class="nav-link"><span>02</span> Experience</a>
+            <a href="#projects" class="nav-link"><span>03</span> Projects</a>
+            <a href="#contact" class="nav-link"><span>04</span> Contact</a>
+            <a href="Bryan_Tang_Resume.pdf" class="btn-resume" download="Bryan_Tang_Resume.pdf">Resume ↓</a>
+        </div>
+    </header>
+
+    <main id="top">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="status-pill reveal">
+                <span class="status-dot"></span>
+                Now — SWE Intern @ Capital One
             </div>
-        </header>
+            <h1 class="hero-title reveal">
+                <span class="line">Bryan</span>
+                <span class="line outline">Tang</span>
+            </h1>
+            <p class="hero-sub reveal">
+                Software&nbsp;Engineer building <em>scalable systems</em> from the kernel to the cloud —
+                currently shipping a <em>payment&nbsp;processor</em> at Capital One.
+            </p>
+            <div class="hero-meta reveal">
+                <span>📍 Austin, TX</span>
+                <span class="dot">•</span>
+                <span>🎓 UT Austin — CS &amp; Math</span>
+            </div>
+            <div class="hero-cta reveal">
+                <a href="#projects" class="btn btn-primary">View my work</a>
+                <a href="#contact" class="btn btn-ghost">Get in touch</a>
+            </div>
 
-        <main>
-            <section id="hero" class="hero">
-                <div class="hero-content">
-                    <h1 class="gradient-text">Bryan Tang</h1>
-                    <h2>Software Engineer</h2>
-                    <p class="hero-description">Building digital experiences through clean code and thoughtful design.
-                    </p>
-                    <div class="cta-buttons">
-                        <a href="#contact" class="btn btn-primary">Get in Touch</a>
-                        <a href="#projects" class="btn btn-secondary">View My Work</a>
-                    </div>
+            <div class="marquee reveal" aria-hidden="true">
+                <div class="marquee-track">
+                    <span>React</span><span>Go</span><span>AWS</span><span>Python</span><span>Java</span>
+                    <span>C / C++</span><span>SQL</span><span>Docker</span><span>Lambda</span><span>S3</span>
+                    <span>React</span><span>Go</span><span>AWS</span><span>Python</span><span>Java</span>
+                    <span>C / C++</span><span>SQL</span><span>Docker</span><span>Lambda</span><span>S3</span>
                 </div>
-                <div class="hero-image">
-                    <div class="code-snippet">
-                        <pre><code class="language-javascript">const bryan = {
-  name: "Bryan Tang",
-  role: "Software Engineer Intern",
-  employer: "Hewlett Packard Enterprise",
-  university: "University of Texas at Austin",
-  location: "Austin, TX",
-  major: "B.S. Computer Science & Mathematics",
-  minor: "Business"
-};</code></pre>
-                    </div>
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="about" class="section">
-                <h2 class="section-title">About Me</h2>
-                <div class="about-content">
-                    <div class="about-text">
-                        <p>Hello! I'm Bryan, a passionate software engineer with expertise in building scalable
-                            applications and solving complex problems. Currently pursuing my B.S. in Computer Science
-                            and Mathematics at UT Austin, I'm constantly exploring new technologies and frameworks to
-                            expand my skill set.</p>
-                        <p>When I'm not coding, you can find me dancing on the SASE Entropy Dance Team, playing basketball, working out, 
-                            or exploring the outdoors.</p>
-                        <div class="skills">
-                            <h3>Technical Skills</h3>
-                            <div class="skills-grid">
-                                <div class="skill-category">
-                                    <h4>Languages</h4>
-                                    <ul>
-                                        <li>Python</li>
-                                        <li>Java</li>
-                                        <li>C</li>
-                                        <li>C++</li>
-                                        <li>HTML/CSS</li>
-                                        <li>Go</li>
-                                        <li>SQL</li>
-                                        <li>Bash</li>
-                                    </ul>
-                                </div>
-                                <div class="skill-category">
-                                    <h4>Technologies</h4>
-                                    <ul>
-                                        <li>Linux</li>
-                                        <li>React.js</li>
-                                        <li>Node.js</li>
-                                        <li>Docker</li>
-                                        <li>Git</li>
-                                        <li>AWS</li>
-                                        <li>PostgreSQL</li>
-                                    </ul>
-                                </div>
-                                <div class="skill-category">
-                                    <h4>Concepts</h4>
-                                    <ul>
-                                        <li>Full Stack Development</li>
-                                        <li>Systems Engineering</li>
-                                        <li>Automation/Scripting</li>
-                                        <li>DevOps</li>
-                                    </ul>
-                                </div>
-                            </div>
+        <!-- STATS -->
+        <section class="stats">
+            <div class="stat reveal">
+                <span class="stat-num" data-count="4">0</span>
+                <span class="stat-label">Internships</span>
+            </div>
+            <div class="stat reveal">
+                <span class="stat-num" data-count="9">0</span>
+                <span class="stat-label">Languages</span>
+            </div>
+            <div class="stat reveal">
+                <span class="stat-num" data-count="2027">0</span>
+                <span class="stat-label">Grad year</span>
+            </div>
+            <div class="stat reveal">
+                <span class="stat-num" data-suffix="%" data-count="300">0</span>
+                <span class="stat-label">Peak efficiency gain</span>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="section">
+            <div class="section-head reveal">
+                <span class="section-kicker">01 — About</span>
+                <h2 class="section-title">Engineer at heart, builder by habit.</h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <p>I'm Bryan — a software engineer pursuing a B.S. in Computer Science &amp; Mathematics
+                        (minor in Business) at <strong>UT Austin</strong>. I like working across the whole stack,
+                        from operating-system internals in C to React frontends and Go services running on AWS.</p>
+                    <p>Right now I'm a Software Engineer Intern at <strong>Capital One</strong>, where I'm building a
+                        payment processor with React, Go, AWS Lambda, and S3. Off the keyboard, you'll find me on the
+                        SASE Entropy Dance Team, on the basketball court, or somewhere outdoors.</p>
+                </div>
+                <div class="skills reveal">
+                    <div class="skill-block">
+                        <h3>Languages</h3>
+                        <div class="chips">
+                            <span>Python</span><span>Go</span><span>Java</span><span>C</span><span>C++</span>
+                            <span>JavaScript</span><span>SQL</span><span>Bash</span><span>HTML/CSS</span>
+                        </div>
+                    </div>
+                    <div class="skill-block">
+                        <h3>Technologies</h3>
+                        <div class="chips">
+                            <span>React.js</span><span>Node.js</span><span>AWS Lambda</span><span>AWS S3</span>
+                            <span>Docker</span><span>PostgreSQL</span><span>Linux</span><span>Git</span>
+                        </div>
+                    </div>
+                    <div class="skill-block">
+                        <h3>Focus</h3>
+                        <div class="chips">
+                            <span>Full-Stack Development</span><span>Systems Engineering</span>
+                            <span>Cloud / DevOps</span><span>Automation</span>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="experience" class="section">
-                <h2 class="section-title">Experience</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">May 2025 - Present</div>
-                        <div class="timeline-content">
+        <!-- EXPERIENCE -->
+        <section id="experience" class="section">
+            <div class="section-head reveal">
+                <span class="section-kicker">02 — Experience</span>
+                <h2 class="section-title">Where I've shipped.</h2>
+            </div>
+            <div class="timeline">
+                <article class="tl-item reveal">
+                    <div class="tl-marker"></div>
+                    <div class="tl-date">May 2026 — Present</div>
+                    <div class="tl-card">
+                        <div class="tl-top">
                             <h3>Software Engineer Intern</h3>
-                            <h4>Hewlett Packard Enterprise</h4>
-                            <p>Developing tools and solutions to improve server management and firmware processes.</p>
-                            <ul>
-                                <li>Developed an open-source CLI tool in Go to query server information via the Redfish API, automating firmware vulnerability detection and improving efficiency by 300% compared to manual inspection workflows.</li>
-                                <li>Engineered 7 Cobra CLI commands to automate firmware auditing and validation, reducing auditing time by 40%.</li>
-                                <li>Architected a migration from JSON to SQLite with advanced indexing, slashing firmware record lookup times by 65%.</li>
-                            </ul>
+                            <span class="tl-org">Capital One</span>
+                        </div>
+                        <p>Building a payment processor on a modern cloud stack.</p>
+                        <ul>
+                            <li>Developing a payment processor with a React frontend and Go services, deployed
+                                serverlessly on AWS Lambda.</li>
+                            <li>Designing event-driven processing flows backed by AWS S3 for durable storage of
+                                transaction artifacts.</li>
+                            <li>Focusing on reliability, idempotency, and clean API design for financial transactions.</li>
+                        </ul>
+                        <div class="tl-tags">
+                            <span>React</span><span>Go</span><span>AWS Lambda</span><span>AWS S3</span>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">Jan 2025 - May 2025</div>
-                        <div class="timeline-content">
+                </article>
+
+                <article class="tl-item reveal">
+                    <div class="tl-marker"></div>
+                    <div class="tl-date">May 2025 — Aug 2025</div>
+                    <div class="tl-card">
+                        <div class="tl-top">
                             <h3>Software Engineer Intern</h3>
-                            <h4>Applied Research Laboratories</h4>
-                            <p>Worked on data visualization and real-time analytics for maritime applications.</p>
-                            <ul>
-                                <li>Built a Java Swing application with asynchronous data fetching and JSON parsing to visualize real-time sensor data via REST API, cutting data retrieval time by 50%.</li>
-                                <li>Integrated geolocation mapping using gRPC Middleware event listener, improving user decision-making in maritime analytics.</li>
-                            </ul>
+                            <span class="tl-org">Hewlett Packard Enterprise</span>
+                        </div>
+                        <p>Built tooling to improve server management and firmware processes.</p>
+                        <ul>
+                            <li>Developed an open-source CLI tool in Go to query server information via the Redfish API,
+                                automating firmware vulnerability detection and improving efficiency by 300% over manual
+                                workflows.</li>
+                            <li>Engineered 7 Cobra CLI commands to automate firmware auditing and validation, reducing
+                                auditing time by 40%.</li>
+                            <li>Architected a migration from JSON to SQLite with advanced indexing, cutting firmware
+                                record lookup times by 65%.</li>
+                        </ul>
+                        <div class="tl-tags">
+                            <span>Go</span><span>Cobra</span><span>SQLite</span><span>Redfish API</span>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">May 2024 - Aug 2024</div>
-                        <div class="timeline-content">
+                </article>
+
+                <article class="tl-item reveal">
+                    <div class="tl-marker"></div>
+                    <div class="tl-date">Jan 2025 — May 2025</div>
+                    <div class="tl-card">
+                        <div class="tl-top">
                             <h3>Software Engineer Intern</h3>
-                            <h4>PCOnline</h4>
-                            <p>Developed automation tools and improved inventory management systems.</p>
-                            <ul>
-                                <li>Designed a full-stack Python application with Tkinter GUI to automate label generation for 6000+ returned products, improving warehouse reconciliation.</li>
-                                <li>Engineered automated UI testers using Selenium, decreasing testing time by 200%.</li>
-                                <li>Extended Bash scripts to support PostgreSQL database operations in Docker containers for testing environments.</li>
-                            </ul>
+                            <span class="tl-org">Applied Research Laboratories</span>
+                        </div>
+                        <p>Data visualization and real-time analytics for maritime applications.</p>
+                        <ul>
+                            <li>Built a Java Swing application with asynchronous data fetching and JSON parsing to
+                                visualize real-time sensor data via REST API, cutting data retrieval time by 50%.</li>
+                            <li>Integrated geolocation mapping using a gRPC middleware event listener, improving
+                                decision-making in maritime analytics.</li>
+                        </ul>
+                        <div class="tl-tags">
+                            <span>Java</span><span>gRPC</span><span>REST</span>
                         </div>
                     </div>
+                </article>
+
+                <article class="tl-item reveal">
+                    <div class="tl-marker"></div>
+                    <div class="tl-date">May 2024 — Aug 2024</div>
+                    <div class="tl-card">
+                        <div class="tl-top">
+                            <h3>Software Engineer Intern</h3>
+                            <span class="tl-org">PCOnline</span>
+                        </div>
+                        <p>Automation tools and inventory management improvements.</p>
+                        <ul>
+                            <li>Designed a full-stack Python application with a Tkinter GUI to automate label generation
+                                for 6000+ returned products, improving warehouse reconciliation.</li>
+                            <li>Engineered automated UI testers using Selenium, decreasing testing time by 200%.</li>
+                            <li>Extended Bash scripts to support PostgreSQL database operations in Docker containers for
+                                testing environments.</li>
+                        </ul>
+                        <div class="tl-tags">
+                            <span>Python</span><span>Selenium</span><span>PostgreSQL</span><span>Docker</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="section">
+            <div class="section-head reveal">
+                <span class="section-kicker">03 — Projects</span>
+                <h2 class="section-title">Things I've built.</h2>
+            </div>
+            <div class="projects-grid">
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-icon">⌘</span>
+                    </div>
+                    <h3>PISTASH-io Shell</h3>
+                    <p>A POSIX-compliant shell with scripting, redirection, and pipelining.</p>
+                    <ul>
+                        <li>Supports 30+ commands with logical operators and short-circuiting via a custom tokenizer
+                            and AST.</li>
+                        <li>Background process support using fork() and exec() for concurrent execution.</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span>C</span><span>C++</span><span>Linux</span><span>Systems</span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-icon">∑</span>
+                    </div>
+                    <h3>Life Insurance Calculator</h3>
+                    <p>Full-stack web app for calculating life insurance premiums with a modern UI.</p>
+                    <ul>
+                        <li>Responsive React frontend with a Node.js/Express backend.</li>
+                        <li>Validation and calculation logic; reduced server response time by 40%.</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span>React</span><span>Node.js</span><span>Express</span><span>Tailwind</span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-icon">◈</span>
+                    </div>
+                    <h3>Custom Operating System</h3>
+                    <p>A minimal Unix-like OS kernel with core operating-system components.</p>
+                    <ul>
+                        <li>Process management, ELF binary loading, system calls, and virtual memory.</li>
+                        <li>Synchronization primitives and basic ext2 file system support.</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span>C</span><span>C++</span><span>x86 Asm</span><span>OS Dev</span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-icon">⛁</span>
+                    </div>
+                    <h3>Life Insurance Form Filler</h3>
+                    <p>Automated life insurance application filling.</p>
+                    <ul>
+                        <li>Selenium + undetected-chromedriver autofills Nationwide applications, cutting manual entry
+                            time by 80%.</li>
+                        <li>Tkinter GUI to securely collect credentials and Excel row data.</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span>Python</span><span>Selenium</span><span>Tkinter</span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal">
+                    <div class="project-top">
+                        <span class="project-icon">◎</span>
+                    </div>
+                    <h3>Face Crop</h3>
+                    <p>Automated face detection and cropping.</p>
+                    <ul>
+                        <li>OpenCV + Haar Cascade classifiers detect and isolate faces from images.</li>
+                        <li>95% detection rate across varied resolutions and lighting conditions.</li>
+                    </ul>
+                    <div class="project-tags">
+                        <span>Python</span><span>OpenCV</span>
+                    </div>
+                </article>
+
+                <a href="https://github.com/tangbryan" target="_blank" rel="noopener noreferrer"
+                    class="project-card project-more reveal">
+                    <span class="more-arrow">→</span>
+                    <h3>More on GitHub</h3>
+                    <p>Browse the rest of my repositories and experiments.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section contact">
+            <div class="reveal">
+                <span class="section-kicker">04 — Contact</span>
+                <h2 class="contact-title">Let's build something.</h2>
+                <p class="contact-sub">I'm always open to new opportunities and good conversations. Whether you have a
+                    question or just want to say hi, my inbox is open.</p>
+                <a href="mailto:bryantang@utexas.edu" class="btn btn-primary contact-btn">Say hello →</a>
+                <div class="social-links">
+                    <a href="https://github.com/tangbryan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/in/tang-bryan" target="_blank" rel="noopener noreferrer"
+                        aria-label="LinkedIn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                            </path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
+                    <a href="mailto:bryantang@utexas.edu" aria-label="Email">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </a>
                 </div>
-            </section>
+            </div>
+        </section>
+    </main>
 
-            <section id="projects" class="section">
-                <h2 class="section-title">Featured Projects</h2>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <div class="project-info">
-                            <h3>PISTASH-io Shell</h3>
-                            <p>A POSIX-compliant shell.</p>
-                            <div class="project-tags">
-                                <span>C</span>
-                                <span>C++</span>
-                                <span>Linux</span>
-                                <span>System Programming</span>
-                            </div>
-                            <ul class="project-details">
-                                <li>Created a POSIX-compliant shell supporting 30+ commands, scripting, redirection, and pipelining</li>
-                                <li>Implemented a custom tokenizer and abstract syntax tree to parse logical operators with short-circuiting</li>
-                                <li>Added background process support using fork() and exec() system calls for concurrent execution</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-info">
-                            <h3>Life Insurance Calculator</h3>
-                            <p>Full-stack web application for calculating life insurance premiums with a modern UI.</p>
-                            <div class="project-tags">
-                                <span>React</span>
-                                <span>Node.js</span>
-                                <span>Express</span>
-                                <span>Tailwind CSS</span>
-                            </div>
-                            <ul class="project-details">
-                                <li>Developed responsive frontend with React and efficient backend with Node.js/Express</li>
-                                <li>Implemented data validation and calculation logic, reducing server response time by 40%</li>
-                                <li>Created RESTful API endpoints for seamless frontend-backend communication</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-info">
-                            <h3>Custom Operating System</h3>
-                            <p>A minimal Unix-like operating system kernel with core OS components.</p>
-                            <div class="project-tags">
-                                <span>C</span>
-                                <span>C++</span>
-                                <span>x86 Assembly</span>
-                                <span>OS Development</span>
-                            </div>
-                            <ul class="project-details">
-                                <li>Implemented core OS components including process management and ELF binary loading</li>
-                                <li>Developed system call handling, virtual memory management, and synchronization primitives</li>
-                                <li>Added basic file system support (ext2) and kernel-level utilities</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-info">
-                            <h3>Life Insurance Form Filler</h3>
-                            <p>Automated life insurance form filling.</p>
-                            <div class="project-tags">
-                                <span>Python</span>
-                            </div>
-                            <ul class="project-details">
-                                <li>Leveraged Selenium and undetected-chromedriver to navigate, log in, and autofill Nationwide Life Insurance
-                                    applications, reducing manual entry time by 80%</li>
-                                <li>Designed a user-friendly GUI with Tkinter to securely collect login credentials and Excel row data for form population</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-info">
-                            <h3>Face Crop</h3>
-                            <p>Automated face cropping.</p>
-                            <div class="project-tags">
-                                <span>Python</span>
-                            </div>
-                            <ul class="project-details">
-                                <li>Designed a Python application using the OpenCV library that automatically detects, and crops faces from images</li>
-                                <li>Leveraged Haar Cascade classifiers to accurately detect facial features and isolate the face region</li>
-                                <li>Attained 95% detection rate and consistent cropping across varied image resolutions and lighting conditions</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>    <!-- Add more project cards as needed -->
-                </div>
-            </section>
-
-            <section id="contact" class="section">
-                <h2 class="section-title">Get In Touch</h2>
-                <div class="contact-content">
-                    <p>I'm currently looking for new opportunities. Whether you have a question or just want to say hi,
-                        I'll get back to you as soon as possible!</p>
-                    <div class="social-links">
-                        <a href="https://github.com/tangbryan" target="_blank" rel="noopener noreferrer"
-                            aria-label="GitHub">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                </path>
-                            </svg>
-                        </a>
-                        <a href="https://linkedin.com/in/tang-bryan" target="_blank" rel="noopener noreferrer"
-                            aria-label="LinkedIn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
-                                </path>
-                                <rect x="2" y="9" width="4" height="12"></rect>
-                                <circle cx="4" cy="4" r="2"></circle>
-                            </svg>
-                        </a>
-                        <a href="mailto:bryantang@utexas.edu" aria-label="Email">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <p>Designed & Built by Bryan Tang</p>
-            <p>© <span id="current-year"></span> All Rights Reserved</p>
-        </footer>
-    </div>
+    <footer class="footer">
+        <p>Designed &amp; built by Bryan Tang</p>
+        <p>© <span id="year"></span> — All rights reserved</p>
+    </footer>
 
     <script>
-        // Update current year
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Smooth scrolling for anchor links
+        // Header shadow on scroll
+        const header = document.getElementById('header');
+        const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // Mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const toggleMenu = (open) => {
+            const isOpen = open ?? !mobileMenu.classList.contains('open');
+            mobileMenu.classList.toggle('open', isOpen);
+            hamburger.classList.toggle('is-active', isOpen);
+            hamburger.setAttribute('aria-expanded', String(isOpen));
+        };
+        hamburger.addEventListener('click', () => toggleMenu());
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+        // Smooth scroll with header offset
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const id = this.getAttribute('href');
+                if (id === '#' || id === '#top') return;
+                const target = document.querySelector(id);
+                if (!target) return;
                 e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
+                window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
             });
         });
 
-        // Add animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        // Reveal on scroll
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('in-view');
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
-
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transitionDelay = `${Math.min(i % 6, 5) * 60}ms`;
+            revealObserver.observe(el);
         });
+
+        // Animated counters
+        const animateCount = (el) => {
+            const target = parseInt(el.dataset.count, 10);
+            const suffix = el.dataset.suffix || '';
+            const duration = 1400;
+            const start = performance.now();
+            const step = (now) => {
+                const p = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.round(target * eased) + suffix;
+                if (p < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        };
+        const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    animateCount(entry.target);
+                    countObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.6 });
+        document.querySelectorAll('.stat-num').forEach(el => countObserver.observe(el));
+
+        // Active nav link
+        const sections = document.querySelectorAll('main section[id]');
+        const navLinks = document.querySelectorAll('.nav .nav-link');
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+                }
+            });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        sections.forEach(s => navObserver.observe(s));
     </script>
 </body>
 
