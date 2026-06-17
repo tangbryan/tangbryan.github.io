@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Trainer — Bryan Tang</title>
+    <meta name="description"
+        content="A GTO preflop & postflop poker trainer — 6-max No-Limit Hold'em opening ranges, 3-bet defense, and flop/turn/river c-bet spots. Built by Bryan Tang.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♠</text></svg>">
+</head>
+
+<body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="glow glow-1" aria-hidden="true"></div>
+    <div class="glow glow-2" aria-hidden="true"></div>
+
+    <header class="pt-header">
+        <a href="/" class="back-link">← Bryan Tang</a>
+        <div class="pt-brand">
+            <span class="pt-logo">♠</span>
+            <span>Poker <span class="grad">Trainer</span></span>
+        </div>
+        <a href="https://github.com/tangbryan/tangbryan.github.io/tree/main/poker-trainer" target="_blank"
+            rel="noopener noreferrer" class="back-link">Source ↗</a>
+    </header>
+
+    <main class="pt-main">
+        <section class="intro">
+            <h1>Learn <span class="grad">GTO</span> poker, one spot at a time.</h1>
+            <p>A 6-max No-Limit Hold'em trainer covering every street. Open-raising and 3-bet defense use
+                standard solver-baseline ranges; flop / turn / river spots are coached with a board-texture model.
+                Clear positions, instant feedback.</p>
+        </section>
+
+        <!-- mode tabs -->
+        <nav class="mode-tabs" id="mode-tabs" aria-label="Training mode"></nav>
+        <p class="mode-desc" id="mode-desc"></p>
+
+        <!-- QUIZ VIEW -->
+        <div id="quiz-view">
+            <div class="play-grid">
+                <!-- left: table + cards -->
+                <div class="panel table-panel">
+                    <div class="table-wrap" id="table"></div>
+                    <div class="context" id="context"></div>
+                    <div class="stage" id="stage"></div>
+                </div>
+
+                <!-- right: actions + feedback -->
+                <div class="panel action-panel">
+                    <div class="score-bar">
+                        <div class="score"><span class="score-num" id="s-acc">0%</span><span class="score-lbl">accuracy</span></div>
+                        <div class="score"><span class="score-num" id="s-correct">0</span><span class="score-lbl">correct</span></div>
+                        <div class="score"><span class="score-num" id="s-total">0</span><span class="score-lbl">total</span></div>
+                        <div class="score"><span class="score-num" id="s-streak">0</span><span class="score-lbl">streak</span></div>
+                        <div class="score"><span class="score-num" id="s-best">0</span><span class="score-lbl">best</span></div>
+                    </div>
+
+                    <div class="action-head">
+                        <span>Your move</span>
+                        <span class="badge hidden" id="heuristic-badge" title="Postflop uses a board-texture heuristic, not a solver">heuristic baseline</span>
+                    </div>
+                    <div class="actions" id="actions"></div>
+
+                    <div class="feedback" id="feedback"></div>
+                    <div class="reveal" id="reveal"></div>
+
+                    <button class="next-btn hidden" id="next-btn">Next spot →<span class="hk">enter</span></button>
+                    <p class="hint">Tip: press <kbd>1</kbd>–<kbd>3</kbd> to answer, <kbd>Enter</kbd> for next.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARTS VIEW -->
+        <div id="chart-view" class="hidden">
+            <div class="panel"><div id="chart-host"></div></div>
+        </div>
+
+        <footer class="pt-footer">
+            <p>Ranges are standard published 100bb 6-max GTO baselines (Upswing / GTO Wizard defaults /
+                PokerCoaching). Postflop is an educational board-texture model, not solver output.
+                For learning only.</p>
+            <p>Built by <a href="/">Bryan Tang</a> · <a
+                    href="https://github.com/tangbryan/tangbryan.github.io/tree/main/poker-trainer">view source</a></p>
+        </footer>
+    </main>
+
+    <script src="js/poker.js"></script>
+    <script src="js/ranges.js"></script>
+    <script src="js/postflop.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
