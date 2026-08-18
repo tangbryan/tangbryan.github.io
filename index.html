@@ -284,12 +284,15 @@
                         <span class="more-arrow">→</span>
                     </div>
                     <h3>Poker Bankroll Tracker</h3>
-                    <p>A profit/loss tracker with charts and variance analytics — live at <strong>/bankroll</strong>.</p>
+                    <p>A profit/loss tracker with charts and variance analytics — results live at
+                        <strong>/bankroll</strong>.</p>
                     <ul>
                         <li>Hand-rolled SVG charts — cumulative profit, monthly P/L, result distribution — with
                             crosshair tooltips and a table view for every chart.</li>
                         <li>Hourly rate with a 95% confidence interval, bb/hr, max drawdown, and streaks, so a win
                             rate can be read against variance instead of at face value.</li>
+                        <li>Split build: the public page is read-only over a committed <code>data.json</code>, while
+                            the editable tracker runs locally and keeps its data in the browser.</li>
                     </ul>
                     <div class="project-tags">
                         <span>JavaScript</span><span>SVG</span><span>Data Viz</span><span>No-build</span>

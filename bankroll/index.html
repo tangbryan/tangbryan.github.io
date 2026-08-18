@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bankroll Tracker — Bryan Tang</title>
+    <title>Poker Bankroll — Bryan Tang</title>
     <meta name="description"
-        content="A poker bankroll tracker with profit/loss charts, hourly-rate and variance analytics, and session-by-session logging. Built by Bryan Tang.">
+        content="Poker results tracked over time — profit/loss charts, hourly rate with confidence intervals, and variance analytics. Built by Bryan Tang.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -26,26 +26,20 @@
         <a href="/" class="back-link">← Bryan Tang</a>
         <div class="bk-brand">
             <span class="bk-logo">♠</span>
-            <span>Bankroll <span class="grad">Tracker</span></span>
+            <span>Poker <span class="grad">Bankroll</span></span>
         </div>
-        <a href="https://github.com/tangbryan/tangbryan.github.io/tree/main/bankroll" target="_blank"
+        <a href="https://github.com/tangbryan/poker-bankroll-tracker" target="_blank"
             rel="noopener noreferrer" class="back-link">Source ↗</a>
     </header>
 
     <main class="bk-main">
 
-        <!-- EMPTY STATE -->
-        <section id="empty-state" class="empty-state hidden">
-            <h1>Track your <span class="grad">poker results</span>.</h1>
-            <p>Log every session and watch the profit curve, hourly rate, and variance take shape.
-                Everything is stored locally in your browser — nothing leaves this device.</p>
-            <div class="empty-actions">
-                <button class="btn btn-primary" id="btn-add-empty">Log your first session</button>
-                <button class="btn btn-ghost" id="btn-demo-empty">Explore with sample data</button>
-            </div>
+        <!-- LOADING / ERROR -->
+        <section id="load-state" class="empty-state">
+            <p class="dim">Loading results…</p>
         </section>
 
-        <div id="app-body">
+        <div id="app-body" class="hidden">
             <!-- HERO -->
             <section class="hero-block">
                 <div class="hero-left">
@@ -57,13 +51,16 @@
                     <p class="hero-sub" id="hero-sub"></p>
                 </div>
                 <div class="hero-actions">
-                    <button class="btn btn-primary" id="btn-add">+ Log session</button>
+                    <span class="readonly-badge" title="This page displays published results and cannot be edited">
+                        <span class="lock" aria-hidden="true">🔒</span> Read-only
+                    </span>
+                    <span class="updated-stamp" id="updated-stamp"></span>
                 </div>
             </section>
 
-            <div id="demo-banner" class="banner hidden">
-                <span>You're viewing <b>sample data</b> so the charts have something to show.</span>
-                <button class="link-btn" id="banner-clear">Clear it and start fresh</button>
+            <div id="placeholder-banner" class="banner hidden">
+                <span><b>Placeholder data.</b> These are sample figures, not real results —
+                    the published <code>data.json</code> hasn't been replaced yet.</span>
             </div>
 
             <!-- FILTERS — one row, scoping every view below -->
@@ -159,26 +156,9 @@
                             <h2>Session log</h2>
                             <p class="card-sub" id="sessions-count"></p>
                         </div>
-                        <button class="btn btn-primary btn-sm" onclick="document.getElementById('btn-add').click()">+ Log session</button>
+                        <button class="btn btn-ghost btn-sm" id="btn-export-csv">Export CSV</button>
                     </div>
                     <div class="table-scroll" id="sessions-table"></div>
-                </article>
-
-                <article class="card">
-                    <div class="card-head">
-                        <div>
-                            <h2>Your data</h2>
-                            <p class="card-sub">Saved in this browser only. Export to keep a backup.</p>
-                        </div>
-                    </div>
-                    <div class="data-actions">
-                        <button class="btn btn-ghost btn-sm" id="btn-export">Export JSON</button>
-                        <button class="btn btn-ghost btn-sm" id="btn-export-csv">Export CSV</button>
-                        <button class="btn btn-ghost btn-sm" id="btn-import">Import JSON</button>
-                        <button class="btn btn-ghost btn-sm" id="btn-demo">Load sample data</button>
-                        <button class="btn btn-danger btn-sm" id="btn-clear">Clear all</button>
-                        <input type="file" id="import-file" accept="application/json,.json" hidden>
-                    </div>
                 </article>
             </section>
 
@@ -249,96 +229,11 @@
         </div>
     </main>
 
-    <!-- ============ ADD / EDIT MODAL ============ -->
-    <div class="modal hidden" id="session-modal" role="dialog" aria-modal="true" aria-labelledby="form-title">
-        <form class="modal-card" id="session-form">
-            <h2 id="form-title">Log a session</h2>
-
-            <div class="type-toggle">
-                <label><input type="radio" name="type" value="cash" checked><span>Cash game</span></label>
-                <label><input type="radio" name="type" value="tournament"><span>Tournament</span></label>
-            </div>
-
-            <div class="form-grid">
-                <div class="field">
-                    <label for="in-date">Date</label>
-                    <input type="date" id="in-date" name="date" required>
-                </div>
-                <div class="field">
-                    <label for="in-hours">Hours played</label>
-                    <input type="number" id="in-hours" name="hours" step="0.25" min="0" placeholder="5">
-                </div>
-                <div class="field">
-                    <label for="in-stakes" id="f-stakes-label">Stakes (e.g. 1/2)</label>
-                    <input type="text" id="in-stakes" name="stakes" placeholder="1/2">
-                </div>
-                <div class="field">
-                    <label for="in-game">Game</label>
-                    <select id="in-game" name="game">
-                        <option>NLH</option><option>PLO</option><option>PLO5</option>
-                        <option>LHE</option><option>Mixed</option><option>Other</option>
-                    </select>
-                </div>
-                <div class="field span-2">
-                    <label for="in-location">Venue</label>
-                    <input type="text" id="in-location" name="location" placeholder="Texas Card House">
-                </div>
-
-                <!-- cash -->
-                <div class="field span-2" id="cash-fields">
-                    <div class="sub-grid">
-                        <div>
-                            <label for="in-buyin">Total buy-in</label>
-                            <input type="number" id="in-buyin" name="buyIn" step="0.01" min="0" placeholder="300">
-                        </div>
-                        <div>
-                            <label for="in-cashout">Cash out</label>
-                            <input type="number" id="in-cashout" name="cashOut" step="0.01" min="0" placeholder="520">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- tournament -->
-                <div class="field span-2 hidden" id="mtt-fields">
-                    <div class="sub-grid">
-                        <div>
-                            <label for="in-mtt-buyin">Buy-in</label>
-                            <input type="number" id="in-mtt-buyin" name="mttBuyIn" step="0.01" min="0" placeholder="200">
-                        </div>
-                        <div>
-                            <label for="in-fee">Fee / rake</label>
-                            <input type="number" id="in-fee" name="fee" step="0.01" min="0" placeholder="40">
-                        </div>
-                        <div>
-                            <label for="in-prize">Prize won</label>
-                            <input type="number" id="in-prize" name="prize" step="0.01" min="0" placeholder="0">
-                        </div>
-                        <div>
-                            <label for="in-entrants">Entrants</label>
-                            <input type="number" id="in-entrants" name="entrants" min="0" placeholder="180">
-                        </div>
-                        <div>
-                            <label for="in-place">Finish</label>
-                            <input type="number" id="in-place" name="place" min="0" placeholder="14">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field span-2">
-                    <label for="in-notes">Notes</label>
-                    <textarea id="in-notes" name="notes" rows="2" placeholder="Game quality, how you ran, anything worth remembering…"></textarea>
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button type="button" class="btn btn-ghost" id="form-cancel">Cancel</button>
-                <button type="submit" class="btn btn-primary" id="form-submit">Add session</button>
-            </div>
-        </form>
-    </div>
-
     <footer class="bk-footer">
-        <p>Built by Bryan Tang · data stays in your browser</p>
+        <p>Built by Bryan Tang · published results, read-only ·
+            <a href="https://github.com/tangbryan/poker-bankroll-tracker" target="_blank"
+                rel="noopener noreferrer" class="footer-link">source ↗</a>
+        </p>
     </footer>
 
     <script type="module" src="js/app.js"></script>

@@ -1,52 +1,75 @@
 /* ============================================================
-   app.js — views, filters, forms, tables
+   app.js — READ-ONLY public view.
+
+   Renders a static data.json. There is deliberately no add / edit / delete,
+   no import, and no localStorage write anywhere in this file. The editable
+   tracker lives at github.com/tangbryan/poker-bankroll-tracker.
    ============================================================ */
 
-import * as store from './store.js';
-import { profitOf } from './store.js';
+import * as data from './data.js';
+import { profitOf, toCSV } from './session.js';
 import * as stats from './stats.js';
 import {
     cumulativeChart, columnChart, barChart, histogram, sparkline,
-    money, pct, signColor, COLORS, hideTip,
+    money, pct, signColor, hideTip,
 } from './charts.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
+const VIEWS = ['dashboard', 'sessions', 'analytics'];
+
 const state = {
     view: 'dashboard',
     filters: { range: 'all', type: 'all', stakes: 'all', location: 'all', q: '' },
     sort: { key: 'date', dir: -1 },
-    editing: null,
 };
 
 /* ---------------- boot ---------------- */
 
-store.load();
-if (!store.all().length && !localStorage.getItem('bt_bankroll_seen')) {
-    // First visit with nothing saved: show the sample history so the charts mean something.
-    store.loadDemo();
-    localStorage.setItem('bt_bankroll_seen', '1');
-}
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await data.load();
+    } catch (err) {
+        showLoadError(err);
+        return;
+    }
 
-document.addEventListener('DOMContentLoaded', () => {
+    if (!data.all().length) {
+        $('#load-state').innerHTML =
+            `<h1>No sessions yet.</h1><p>This tracker has no data published to it yet.</p>`;
+        return;
+    }
+
+    $('#load-state').classList.add('hidden');
+    $('#app-body').classList.remove('hidden');
+
+    const meta = data.getMeta();
+    $('#placeholder-banner').classList.toggle('hidden', !meta.placeholder);
+    if (meta.updated) {
+        $('#updated-stamp').textContent = `Updated ${shortDate(meta.updated.slice(0, 10))}`;
+    }
+
     wireNav();
     wireFilters();
-    wireForm();
-    wireData();
-    store.subscribe(render);
-    render();
+    wireExport();
+    wireTableToggles();
 });
+
+function showLoadError(err) {
+    $('#load-state').innerHTML = `
+        <h1>Couldn't load the data.</h1>
+        <p>${escapeHTML(err.message)}</p>
+        <p class="dim">If you're opening this file directly, serve it over HTTP instead —
+        <code>python3 -m http.server</code> — since <code>fetch</code> is blocked on <code>file://</code>.</p>`;
+    console.error(err);
+}
 
 /* ---------------- navigation ---------------- */
 
-const VIEWS = ['dashboard', 'sessions', 'analytics'];
-
 function wireNav() {
     $$('.view-tab').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            location.hash = btn.dataset.view;   // routing drives the view
-        });
+        btn.addEventListener('click', () => { location.hash = btn.dataset.view; });
     });
     window.addEventListener('hashchange', applyHash);
     applyHash();
@@ -72,56 +95,42 @@ function wireFilters() {
     $('#f-type').addEventListener('change', (e) => { state.filters.type = e.target.value; render(); });
     $('#f-stakes').addEventListener('change', (e) => { state.filters.stakes = e.target.value; render(); });
     $('#f-location').addEventListener('change', (e) => { state.filters.location = e.target.value; render(); });
+
     const q = $('#f-search');
     let t;
     q.addEventListener('input', (e) => {
         clearTimeout(t);
         t = setTimeout(() => { state.filters.q = e.target.value.trim(); render(); }, 160);
     });
+
     $('#f-reset').addEventListener('click', () => {
         state.filters = { range: 'all', type: 'all', stakes: 'all', location: 'all', q: '' };
         $('#f-range').value = 'all'; $('#f-type').value = 'all';
         $('#f-stakes').value = 'all'; $('#f-location').value = 'all'; $('#f-search').value = '';
         render();
     });
-}
 
-function refreshFilterOptions() {
-    const all = store.all();
-    const fill = (sel, values, current) => {
+    // populated once — the dataset never changes at runtime
+    const fill = (sel, values) => {
         const node = $(sel);
-        const opts = ['all', ...values];
-        node.innerHTML = opts.map((v) =>
-            `<option value="${escapeAttr(v)}">${v === 'all' ? node.dataset.allLabel : escapeHTML(v)}</option>`).join('');
-        node.value = opts.includes(current) ? current : 'all';
-        if (node.value !== current) state.filters[node.dataset.key] = node.value;
+        node.innerHTML = ['all', ...values].map((v) =>
+            `<option value="${escapeHTML(v)}">${v === 'all' ? node.dataset.allLabel : escapeHTML(v)}</option>`).join('');
     };
-    fill('#f-stakes', stats.uniqueValues(all, 'stakes'), state.filters.stakes);
-    fill('#f-location', stats.uniqueValues(all, 'location'), state.filters.location);
+    fill('#f-stakes', stats.uniqueValues(data.all(), 'stakes'));
+    fill('#f-location', stats.uniqueValues(data.all(), 'location'));
 }
 
-const filtered = () => stats.applyFilters(store.all(), state.filters);
+const filtered = () => stats.applyFilters(data.all(), state.filters);
 
 /* ---------------- render ---------------- */
 
 function render() {
-    refreshFilterOptions();
     const rows = filtered();
-    const hasAny = store.all().length > 0;
-
-    $('#empty-state').classList.toggle('hidden', hasAny);
-    $('#app-body').classList.toggle('hidden', !hasAny);
-    $('#demo-banner').classList.toggle('hidden', !store.getSettings().demo);
-    if (!hasAny) return;
-
-    renderHero(rows);   // the hero sits above the tabs, so every view keeps it current
-
+    renderHero(rows);
     if (state.view === 'dashboard') renderDashboard(rows);
     else if (state.view === 'sessions') renderSessions(rows);
     else renderAnalytics(rows);
 }
-
-/* ---------------- dashboard ---------------- */
 
 function renderHero(rows) {
     const s = stats.summary(rows);
@@ -131,19 +140,17 @@ function renderHero(rows) {
     $('#hero-sub').innerHTML = s.n
         ? `across <b>${s.n}</b> sessions · <b>${s.hours.toFixed(0)}</b> hours played`
         : 'no sessions in this range';
-
-    const trend = stats.cumulative(rows).map((p) => p.value);
-    sparkline($('#hero-spark'), trend.slice(-40), { width: 160, height: 40 });
+    sparkline($('#hero-spark'), stats.cumulative(rows).map((p) => p.value).slice(-40), { width: 160, height: 40 });
 }
+
+/* ---------------- dashboard ---------------- */
 
 function renderDashboard(rows) {
     const s = stats.summary(rows);
 
-    // stat tiles
     tiles($('#dash-tiles'), [
         {
-            label: 'Hourly rate', value: `${money(s.hourly, { sign: true })}/hr`,
-            tone: s.hourly,
+            label: 'Hourly rate', value: `${money(s.hourly, { sign: true })}/hr`, tone: s.hourly,
             meta: s.n > 1
                 ? `95% CI ${money(s.hourlyLow, { sign: true })} to ${money(s.hourlyHigh, { sign: true })}`
                 : 'need more sessions',
@@ -163,10 +170,10 @@ function renderDashboard(rows) {
         },
     ]);
 
-    // charts
-    cumulativeChart($('#chart-cumulative'), stats.cumulative(rows), { height: 320 });
+    const cum = stats.cumulative(rows);
+    cumulativeChart($('#chart-cumulative'), cum, { height: 320 });
     tableTwin('#table-cumulative', ['Date', 'Session', 'Running total'],
-        stats.cumulative(rows).slice().reverse().slice(0, 60).map((p) => [
+        cum.slice().reverse().slice(0, 60).map((p) => [
             shortDate(p.date), money(profitOf(p.session), { sign: true }), money(p.value, { sign: true }),
         ]));
 
@@ -203,24 +210,22 @@ function tiles(container, items) {
 function renderAnalytics(rows) {
     const s = stats.summary(rows);
 
-    const mk = (groups, sortFn = (a, b) => b.net - a.net) => groups
-        .filter((g) => g.n > 0).sort(sortFn)
+    const mk = (groups) => groups
+        .filter((g) => g.n > 0).sort((a, b) => b.net - a.net)
         .map((g) => ({
             label: g.key, value: g.net,
             meta: `${g.n} session${g.n === 1 ? '' : 's'} · ${g.hours.toFixed(1)}h · ${money(g.hourly, { sign: true })}/hr · ${pct(g.winRate)} win`,
         }));
+    const tbl = (groups) => groups.sort((a, b) => b.net - a.net)
+        .map((g) => [g.key, g.n, g.hours.toFixed(1), money(g.hourly, { sign: true }), money(g.net, { sign: true })]);
 
-    const byStakes = mk(stats.groupBy(rows, (x) => x.stakes || '—'));
-    barChart($('#chart-stakes'), byStakes);
+    barChart($('#chart-stakes'), mk(stats.groupBy(rows, (x) => x.stakes || '—')));
     tableTwin('#table-stakes', ['Stakes', 'Sessions', 'Hours', '$/hr', 'Profit'],
-        stats.groupBy(rows, (x) => x.stakes || '—').sort((a, b) => b.net - a.net)
-            .map((g) => [g.key, g.n, g.hours.toFixed(1), money(g.hourly, { sign: true }), money(g.net, { sign: true })]));
+        tbl(stats.groupBy(rows, (x) => x.stakes || '—')));
 
-    const byLoc = mk(stats.groupBy(rows, (x) => x.location || '—'));
-    barChart($('#chart-location'), byLoc);
-    tableTwin('#table-location', ['Location', 'Sessions', 'Hours', '$/hr', 'Profit'],
-        stats.groupBy(rows, (x) => x.location || '—').sort((a, b) => b.net - a.net)
-            .map((g) => [g.key, g.n, g.hours.toFixed(1), money(g.hourly, { sign: true }), money(g.net, { sign: true })]));
+    barChart($('#chart-location'), mk(stats.groupBy(rows, (x) => x.location || '—')));
+    tableTwin('#table-location', ['Venue', 'Sessions', 'Hours', '$/hr', 'Profit'],
+        tbl(stats.groupBy(rows, (x) => x.location || '—')));
 
     const dow = stats.byDayOfWeek(rows);
     columnChart($('#chart-dow'), dow.map((g) => ({
@@ -230,10 +235,8 @@ function renderAnalytics(rows) {
     tableTwin('#table-dow', ['Day', 'Sessions', 'Hours', '$/hr', 'Profit'],
         dow.map((g) => [g.key, g.n, g.hours.toFixed(1), money(g.hourly, { sign: true }), money(g.net, { sign: true })]));
 
-    // format-level comparison
-    const cash = rows.filter((r) => r.type === 'cash');
-    const mtt = rows.filter((r) => r.type === 'tournament');
-    const cashS = stats.summary(cash), mttS = stats.summary(mtt);
+    const cashS = stats.summary(rows.filter((r) => r.type === 'cash'));
+    const mttS = stats.summary(rows.filter((r) => r.type === 'tournament'));
     $('#format-compare').innerHTML = `
         <table class="data-table">
             <thead><tr><th>Metric</th><th>Cash</th><th>Tournament</th></tr></thead>
@@ -248,7 +251,6 @@ function renderAnalytics(rows) {
             </tbody>
         </table>`;
 
-    // risk & consistency
     const streakTxt = s.streak.count
         ? `${s.streak.count} ${s.streak.dir > 0 ? 'winning' : 'losing'} session${s.streak.count === 1 ? '' : 's'}`
         : '—';
@@ -262,7 +264,7 @@ function renderAnalytics(rows) {
     ]);
 
     $('#variance-note').innerHTML = s.n > 1
-        ? `Over <b>${s.n}</b> sessions your observed rate is <b style="color:${signColor(s.hourly)}">${money(s.hourly, { sign: true })}/hr</b>.
+        ? `Over <b>${s.n}</b> sessions the observed rate is <b style="color:${signColor(s.hourly)}">${money(s.hourly, { sign: true })}/hr</b>.
            Accounting for variance, the 95% confidence interval runs from
            <b>${money(s.hourlyLow, { sign: true })}</b> to <b>${money(s.hourlyHigh, { sign: true })}</b> per hour —
            ${s.hourlyLow > 0
@@ -270,7 +272,7 @@ function renderAnalytics(rows) {
             : s.hourlyHigh < 0
                 ? 'the whole interval is below zero, which is a genuine losing rate rather than bad luck.'
                 : 'the interval still straddles zero, so this sample cannot yet distinguish skill from variance.'}`
-        : 'Log at least two sessions to estimate a confidence interval.';
+        : 'At least two sessions are needed to estimate a confidence interval.';
 }
 
 const fmtRow = (label, a, b, tone = false) => `
@@ -278,7 +280,7 @@ const fmtRow = (label, a, b, tone = false) => `
     <td${tone ? ` style="color:${signColor(parseFloat(String(a).replace(/[^0-9.-]/g, '')) || 0)}"` : ''}>${a}</td>
     <td${tone ? ` style="color:${signColor(parseFloat(String(b).replace(/[^0-9.-]/g, '')) || 0)}"` : ''}>${b}</td></tr>`;
 
-/* ---------------- sessions table ---------------- */
+/* ---------------- sessions table (read-only) ---------------- */
 
 function renderSessions(rows) {
     const { key, dir } = state.sort;
@@ -287,15 +289,15 @@ function renderSessions(rows) {
         : s[key];
     const sorted = rows.slice().sort((a, b) => {
         const x = val(a), y = val(b);
-        if (x === y) return 0;
-        return (x > y ? 1 : -1) * dir;
+        return x === y ? 0 : (x > y ? 1 : -1) * dir;
     });
 
+    const total = data.all().length;
     $('#sessions-count').textContent =
-        `${sorted.length} session${sorted.length === 1 ? '' : 's'}${sorted.length !== store.all().length ? ` of ${store.all().length}` : ''}`;
+        `${sorted.length} session${sorted.length === 1 ? '' : 's'}${sorted.length !== total ? ` of ${total}` : ''}`;
 
     const head = [
-        ['date', 'Date'], ['type', 'Type'], ['stakes', 'Stakes'], ['location', 'Location'],
+        ['date', 'Date'], ['type', 'Type'], ['stakes', 'Stakes'], ['location', 'Venue'],
         ['hours', 'Hours'], ['profit', 'Profit'], ['hourly', '$/hr'],
     ];
 
@@ -304,12 +306,11 @@ function renderSessions(rows) {
             <thead><tr>
                 ${head.map(([k, label]) =>
                     `<th class="sortable${key === k ? ' sorted' : ''}" data-sort="${k}">${label}${key === k ? `<span class="caret">${dir > 0 ? '▲' : '▼'}</span>` : ''}</th>`).join('')}
-                <th class="col-actions"><span class="sr-only">Actions</span></th>
             </tr></thead>
             <tbody>
                 ${sorted.length ? sorted.map((s) => {
                     const p = profitOf(s);
-                    return `<tr data-id="${s.id}">
+                    return `<tr>
                         <td>${shortDate(s.date)}</td>
                         <td><span class="pill pill-${s.type}">${s.type === 'cash' ? 'Cash' : 'MTT'}</span></td>
                         <td>${escapeHTML(s.stakes || '—')}</td>
@@ -317,152 +318,34 @@ function renderSessions(rows) {
                         <td class="num">${s.hours ? s.hours.toFixed(1) : '—'}</td>
                         <td class="num" style="color:${signColor(p)};font-weight:600">${money(p, { sign: true })}</td>
                         <td class="num">${s.hours ? money(p / s.hours, { sign: true }) : '—'}</td>
-                        <td class="col-actions">
-                            <button class="icon-btn" data-act="edit" data-id="${s.id}" title="Edit session" aria-label="Edit session">✎</button>
-                            <button class="icon-btn danger" data-act="del" data-id="${s.id}" title="Delete session" aria-label="Delete session">✕</button>
-                        </td>
                     </tr>`;
-                }).join('') : `<tr><td colspan="8" class="empty-row">No sessions match these filters.</td></tr>`}
+                }).join('') : `<tr><td colspan="7" class="empty-row">No sessions match these filters.</td></tr>`}
             </tbody>
         </table>`;
 
     $$('#sessions-table .sortable').forEach((th) => th.addEventListener('click', () => {
         const k = th.dataset.sort;
-        state.sort = { key: k, dir: state.sort.key === k ? -state.sort.dir : (k === 'date' ? -1 : -1) };
+        state.sort = { key: k, dir: state.sort.key === k ? -state.sort.dir : -1 };
         renderSessions(filtered());
     }));
-
-    $$('#sessions-table [data-act]').forEach((btn) => btn.addEventListener('click', () => {
-        const s = store.byId(btn.dataset.id);
-        if (!s) return;
-        if (btn.dataset.act === 'edit') openForm(s);
-        else if (confirm(`Delete the ${shortDate(s.date)} session (${money(profitOf(s), { sign: true })})?`)) {
-            store.remove(s.id);
-        }
-    }));
 }
 
-/* ---------------- add / edit form ---------------- */
+/* ---------------- export (of already-public data) ---------------- */
 
-function wireForm() {
-    $('#btn-add').addEventListener('click', () => openForm(null));
-    $('#btn-add-empty').addEventListener('click', () => openForm(null));
-    $('#form-cancel').addEventListener('click', closeForm);
-    $('#session-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'session-modal') closeForm();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !$('#session-modal').classList.contains('hidden')) closeForm();
-    });
-    $$('input[name="type"]').forEach((r) => r.addEventListener('change', syncFormType));
-    $('#session-form').addEventListener('submit', onSubmit);
-}
-
-function syncFormType() {
-    const type = $('input[name="type"]:checked').value;
-    const isCash = type === 'cash';
-    $('#cash-fields').classList.toggle('hidden', !isCash);
-    $('#mtt-fields').classList.toggle('hidden', isCash);
-    $('#f-stakes-label').textContent = isCash ? 'Stakes (e.g. 1/2)' : 'Event (e.g. $240 MTT)';
-    $('#in-stakes').placeholder = isCash ? '1/2' : '$240 MTT';
-}
-
-function openForm(session) {
-    state.editing = session ? session.id : null;
-    const f = $('#session-form');
-    f.reset();
-    $('#form-title').textContent = session ? 'Edit session' : 'Log a session';
-    $('#form-submit').textContent = session ? 'Save changes' : 'Add session';
-
-    const s = session || {
-        date: new Date().toISOString().slice(0, 10), type: 'cash',
-        game: 'NLH', stakes: '', location: '', hours: '',
-    };
-    $(`input[name="type"][value="${s.type}"]`).checked = true;
-    f.date.value = s.date;
-    f.game.value = s.game || 'NLH';
-    f.stakes.value = s.stakes || '';
-    f.location.value = s.location || '';
-    f.hours.value = s.hours || '';
-    // cash and tournament keep separate buy-in inputs so the form can hold both
-    f.buyIn.value = s.type === 'cash' ? (s.buyIn || '') : '';
-    f.mttBuyIn.value = s.type === 'tournament' ? (s.buyIn || '') : '';
-    f.cashOut.value = s.cashOut || '';
-    f.fee.value = s.fee || '';
-    f.prize.value = s.prize || '';
-    f.entrants.value = s.entrants || '';
-    f.place.value = s.place || '';
-    f.notes.value = s.notes || '';
-    syncFormType();
-
-    $('#session-modal').classList.remove('hidden');
-    setTimeout(() => f.date.focus(), 30);
-}
-
-function closeForm() {
-    $('#session-modal').classList.add('hidden');
-    state.editing = null;
-}
-
-function onSubmit(e) {
-    e.preventDefault();
-    const f = e.target;
-    const type = $('input[name="type"]:checked').value;
-    const data = {
-        date: f.date.value,
-        type,
-        game: f.game.value,
-        stakes: f.stakes.value,
-        location: f.location.value,
-        hours: f.hours.value,
-        buyIn: type === 'tournament' ? f.mttBuyIn.value : f.buyIn.value,
-        cashOut: f.cashOut.value,
-        fee: f.fee.value,
-        prize: f.prize.value,
-        entrants: f.entrants.value,
-        place: f.place.value,
-        notes: f.notes.value,
-    };
-    if (!data.date) return;
-    if (state.editing) store.update(state.editing, data);
-    else store.add(data);
-    closeForm();
-}
-
-/* ---------------- data management ---------------- */
-
-function wireData() {
-    $('#btn-export').addEventListener('click', () => {
-        download(`bankroll-${todayStr()}.json`, store.exportJSON(), 'application/json');
-    });
+function wireExport() {
     $('#btn-export-csv').addEventListener('click', () => {
-        download(`bankroll-${todayStr()}.csv`, store.exportCSV(filtered()), 'text/csv');
+        const csv = toCSV(filtered());
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bankroll-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
     });
-    $('#btn-import').addEventListener('click', () => $('#import-file').click());
-    $('#import-file').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        try {
-            const { added, skipped } = store.importJSON(await file.text());
-            alert(`Imported ${added} session${added === 1 ? '' : 's'}.${skipped ? ` Skipped ${skipped} duplicate${skipped === 1 ? '' : 's'}.` : ''}`);
-        } catch (err) {
-            alert(`Could not import that file: ${err.message}`);
-        }
-        e.target.value = '';
-    });
-    $('#btn-demo').addEventListener('click', () => {
-        if (store.all().length && !confirm('Replace your current sessions with the sample history?')) return;
-        store.loadDemo();
-    });
-    $('#btn-demo-empty').addEventListener('click', () => store.loadDemo());
-    $('#btn-clear').addEventListener('click', () => {
-        if (confirm('Delete every saved session? Export first if you want a backup — this cannot be undone.')) {
-            store.clearAll();
-        }
-    });
-    $('#banner-clear').addEventListener('click', () => store.clearAll());
+}
 
-    // chart table-view toggles
+function wireTableToggles() {
     $$('.table-toggle').forEach((btn) => btn.addEventListener('click', () => {
         const panel = $(btn.dataset.target);
         const open = panel.classList.toggle('open');
@@ -471,16 +354,7 @@ function wireData() {
     }));
 }
 
-function download(name, content, mime) {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = name;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-/* ---------------- small helpers ---------------- */
+/* ---------------- helpers ---------------- */
 
 function tableTwin(sel, headers, rows) {
     $(sel).innerHTML = `
@@ -493,10 +367,7 @@ function tableTwin(sel, headers, rows) {
 const shortDate = (iso) =>
     new Date(iso + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' });
 
-const todayStr = () => new Date().toISOString().slice(0, 10);
-
 function escapeHTML(str) {
     return String(str).replace(/[&<>"']/g, (c) =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-const escapeAttr = escapeHTML;

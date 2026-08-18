@@ -2,7 +2,7 @@
    stats.js — all derived metrics. Pure functions over sessions.
    ============================================================ */
 
-import { profitOf, investedOf } from './store.js';
+import { profitOf, investedOf } from './session.js';
 
 export const sum = (arr, f = (x) => x) => arr.reduce((a, b) => a + f(b), 0);
 const mean = (arr, f = (x) => x) => (arr.length ? sum(arr, f) / arr.length : 0);
