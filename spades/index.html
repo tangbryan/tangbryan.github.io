@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spades Scoreboard — Bryan Tang</title>
+    <meta name="description"
+        content="A spades scoreboard that tracks bids, tricks, bags, nils and running scores — with a persistent team roster, lifetime records and head-to-head history. Built by Bryan Tang.">
+    <meta name="theme-color" content="#0b0b0f">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♠</text></svg>">
+</head>
+
+<body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="glow glow-1" aria-hidden="true"></div>
+    <div class="glow glow-2" aria-hidden="true"></div>
+
+    <header class="sp-header">
+        <a href="/" class="back-link">← Bryan Tang</a>
+        <div class="sp-brand">
+            <span class="sp-logo">♠</span>
+            <span>Spades <span class="grad">Scoreboard</span></span>
+        </div>
+        <nav class="sp-tabs" role="tablist" aria-label="Sections">
+            <button class="tab is-active" role="tab" data-view="play" aria-selected="true">Play</button>
+            <button class="tab" role="tab" data-view="teams" aria-selected="false">Teams</button>
+            <button class="tab" role="tab" data-view="history" aria-selected="false">History</button>
+        </nav>
+    </header>
+
+    <main class="sp-main">
+        <section id="view-play" class="view" role="tabpanel" aria-label="Play"></section>
+        <section id="view-teams" class="view hidden" role="tabpanel" aria-label="Teams"></section>
+        <section id="view-history" class="view hidden" role="tabpanel" aria-label="History"></section>
+    </main>
+
+    <footer class="sp-footer">
+        <p>Scores live in this browser only — nothing is uploaded. Use <strong>Export</strong> on the History tab to
+            move a season to another device.</p>
+    </footer>
+
+    <div id="modal-root" class="modal-root hidden" role="dialog" aria-modal="true"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
