@@ -81,6 +81,18 @@ of the nearest reserved hue. The site's violet/cyan gradient and the 地主 gold
 are excluded on purpose, so identity never reads as decoration and the role
 badge never reads as a person. Don't substitute one by eye.
 
+**The players are drawn, not sourced.** Public-domain farmer clipart exists, but
+none of it can tint to a seat colour, swap its hat when the role changes, or
+raise its arms on a win — those SVGs carry hardcoded fills. There is also no
+public-domain 地主 to pair with a public-domain peasant, so found art would have
+put two artists' styles at the same table. The hat is the role: nobody wears one
+until a landlord is picked, then it is a gold-banded cap or a straw hat. A
+raised arm is a different path rather than a CSS rotation of the hanging one,
+because `transform` on a nested SVG group resolves its origin against the
+viewBox rather than the shoulder and so never pivots at the joint. Redrawing is
+free here anyway — the table is a pure render. The winning side's pose previews
+with the rest of the draft; the hop is held back until the round is recorded.
+
 **The table is a render of the round being typed**, not a picture drawn after
 the fact. It takes the same engine call that will score the round, which is why
 the projected deltas on the felt and the number in the form can never disagree.

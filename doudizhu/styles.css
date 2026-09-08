@@ -156,9 +156,25 @@ a { color: inherit; text-decoration: none; }
 /* seats */
 .dd-seat-disc { fill: #1b1b25; }
 .dd-seat-ring { fill: none; stroke: var(--seat-color); stroke-width: 2.5; opacity: .9; }
-.dd-seat-initials { font-family: var(--font-display); font-size: 25px; font-weight: 600; fill: var(--text); }
 .dd-seat-name { font-size: 15px; font-weight: 500; fill: var(--text); }
 .dd-seat-score { font-family: var(--font-mono); font-size: 15px; fill: var(--text-dim); }
+
+/* the seated players */
+.dd-fig-body { stroke: rgba(0, 0, 0, .28); stroke-width: 1; }
+.dd-figure { transform-box: fill-box; transform-origin: center; }
+
+/* The pose previews with the rest of the draft, but the celebration is earned:
+   the hop only runs once the round is actually recorded. */
+.dd-seat[data-phase="result"] .dd-figure[data-outcome="win"] { animation: dd-cheer .52s var(--ease) 3; }
+@keyframes dd-cheer {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+}
+
+/* The loser does not need to be animated to read as beaten — the seat is
+   already dimmed, so a small slump is enough. */
+.dd-figure[data-outcome="lose"] { transform: translateY(3px); }
+.dd-figure[data-outcome="lose"] .dd-eye { transform: scaleY(.45); transform-box: fill-box; transform-origin: center; }
 
 .dd-seat-halo {
     fill: none; stroke: var(--gold); stroke-width: 2; opacity: .5;
@@ -477,7 +493,6 @@ tr.is-redeal td:not(:last-child) { opacity: .55; }
  * deliberately left alone: their widths are measured in JS.
  */
 @media (max-width: 760px) {
-    .dd-seat-initials { font-size: 36px; }
     .dd-seat-name { font-size: 25px; }
     .dd-seat-score { font-size: 25px; }
     .dd-seat-delta { font-size: 28px; }

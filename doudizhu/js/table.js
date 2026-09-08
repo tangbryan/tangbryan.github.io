@@ -16,7 +16,7 @@
    ============================================================ */
 
 import { multiplier } from './scoring.js';
-import { initials, signed } from './dom.js';
+import { signed } from './dom.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -204,6 +204,96 @@ function chain({ call, chainInfo, stake, phase, redeal, compact }) {
     return g;
 }
 
+/* ---------------- the players ---------------- */
+
+const SKIN = '#efc79f';
+const STRAW = '#d8b26a';
+const STRAW_DARK = '#a8853f';
+
+/**
+ * A seated player, drawn rather than sourced.
+ *
+ * The figure has to tint to the seat colour, swap its hat when the role
+ * changes and raise its arms on a win — none of which stock clipart can do,
+ * since those SVGs carry hardcoded fills. There is also no public-domain 地主
+ * to pair with a public-domain peasant, so any found art would have put two
+ * artists' styles at the same table.
+ *
+ * The hat is the role: nobody wears one until a landlord is picked, then it is
+ * a gold-banded cap or a straw hat. Each arm is nested in a group translated to
+ * its shoulder, so rotating the inner group pivots at the joint — no
+ * transform-origin in user units, which SVG handles inconsistently.
+ */
+function figure(role, color, outcome) {
+    const g = s('g.dd-figure', { 'data-role': role, 'data-outcome': outcome || 'none' });
+
+    /*
+     * Arms hang wide enough to clear the torso — tucked against it they read as
+     * no arms at all, and there is nothing to raise on a win.
+     *
+     * The raised arm is a different path rather than a CSS rotation of the
+     * hanging one: `transform` on a nested SVG group resolves its origin
+     * against the viewBox, not the shoulder, so rotating never pivots at the
+     * joint. Redrawing costs nothing here because the table is a pure render.
+     */
+    const arm = (side) => {
+        const raised = outcome === 'win';
+        const slump = outcome === 'lose';
+        const d = raised
+            ? `M 0 0 Q ${5.5 * side} -6.5 ${7.5 * side} -13.5`
+            : `M 0 0 Q ${(slump ? 3 : 4.5) * side} 6 ${(slump ? 2.5 : 4) * side} 12.5`;
+        const hand = raised ? { x: 7.5 * side, y: -14.5 } : { x: (slump ? 2.5 : 4) * side, y: 13 };
+        return s('g', { transform: `translate(${10.5 * side} 10)` }, [
+            s(`g.dd-arm.dd-arm-${side < 0 ? 'l' : 'r'}`, {}, [
+                s('path', { d, fill: 'none', stroke: color, 'stroke-width': 5, 'stroke-linecap': 'round' }),
+                s('circle', { cx: hand.x, cy: hand.y, r: 3.1, fill: SKIN }),
+            ]),
+        ]);
+    };
+
+    g.append(arm(-1));
+    g.append(s('path.dd-fig-body', { d: 'M -10 9 Q 0 3.5 10 9 L 12.5 27 Q 0 31.5 -12.5 27 Z', fill: color }));
+    // A landlord wears the money: a gold sash, so the role reads even where the
+    // hat is clipped by the disc.
+    if (role === 'landlord') {
+        g.append(s('path', { d: 'M -9.5 10.5 L 11 24.5 L 11.8 28.5 L -10.5 14 Z', fill: '#e8b44a', opacity: .9 }));
+    }
+    g.append(s('circle', { cx: 0, cy: -9, r: 12.5, fill: SKIN }));
+
+    // face
+    g.append(s('circle.dd-eye', { cx: -4.6, cy: -11.5, r: 1.7, fill: '#2a2028' }));
+    g.append(s('circle.dd-eye', { cx: 4.6, cy: -11.5, r: 1.7, fill: '#2a2028' }));
+    const mouth = outcome === 'win'
+        ? s('path', { d: 'M -4 -4 Q 0 1.5 4 -4 Q 0 -2.5 -4 -4 Z', fill: '#8d4a4a' })
+        : outcome === 'lose'
+            ? s('path', { d: 'M -3.5 -2.5 Q 0 -5.5 3.5 -2.5', fill: 'none', stroke: '#8d4a4a', 'stroke-width': 1.4, 'stroke-linecap': 'round' })
+            : s('path', { d: 'M -3.5 -4.5 Q 0 -2 3.5 -4.5', fill: 'none', stroke: '#8d4a4a', 'stroke-width': 1.4, 'stroke-linecap': 'round' });
+    g.append(mouth);
+
+    if (role === 'landlord') {
+        // Lifted well clear of the #1b1b25 disc — at the crown's first value it
+        // read as a floating gold band with no hat under it.
+        g.append(s('g.dd-hat', {}, [
+            s('ellipse', { cx: 0, cy: -19.5, rx: 16.5, ry: 4.4, fill: '#3b3352' }),
+            s('path', { d: 'M -9.5 -20 L -8 -31 Q 0 -34.5 8 -31 L 9.5 -20 Z', fill: '#4d4270' }),
+            s('rect', { x: -10, y: -24.6, width: 20, height: 4.6, rx: 1.6, fill: '#e8b44a' }),
+            s('circle', { cx: 0, cy: -33, r: 2.6, fill: '#f0cd83' }),
+        ]));
+    } else if (role === 'peasant') {
+        g.append(s('g.dd-hat', {}, [
+            s('ellipse', { cx: 0, cy: -19, rx: 21, ry: 5.2, fill: STRAW }),
+            s('path', { d: 'M -12 -20 Q 0 -33 12 -20 Z', fill: STRAW }),
+            s('path', { d: 'M -21 -19 Q 0 -13.5 21 -19', fill: 'none', stroke: STRAW_DARK, 'stroke-width': 1.1, opacity: .8 }),
+        ]));
+    } else {
+        // No role settled yet, so no hat — just hair.
+        g.append(s('path', { d: 'M -12 -12 Q -11 -23 0 -23 Q 11 -23 12 -12 Q 6 -18 0 -17 Q -6 -18 -12 -12 Z', fill: '#3a3040' }));
+    }
+
+    g.append(arm(1));
+    return g;
+}
+
 /* ---------------- seats ---------------- */
 
 function seat(player, ctx) {
@@ -226,8 +316,12 @@ function seat(player, ctx) {
         g.append(s('circle.dd-seat-halo', { cx: pos.x, cy: pos.y, r: SEAT_R + 8 }));
     }
     g.append(s('circle.dd-seat-disc', { cx: pos.x, cy: pos.y, r: SEAT_R }));
+    // The figure replaces the initials: the name is already directly below it,
+    // and a seated player carries the role in a way two letters cannot.
+    g.append(s('g', { transform: `translate(${pos.x} ${pos.y + 1}) scale(1.05)` },
+        figure(ctx.landlordId ? (isLandlord ? 'landlord' : 'peasant') : 'none', player.color,
+            ctx.winner ? (won ? 'win' : 'lose') : null)));
     g.append(s('circle.dd-seat-ring', { cx: pos.x, cy: pos.y, r: SEAT_R }));
-    g.append(s('text.dd-seat-initials', { x: pos.x, y: pos.y + 8, 'text-anchor': 'middle' }, initials(player.name)));
 
     // 地主 / 农 as a small seal, the way the role is actually marked at a table.
     if (ctx.landlordId) {
