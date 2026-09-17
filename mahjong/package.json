@@ -1,0 +1,9 @@
+{
+  "name": "mahjong-tutor",
+  "private": true,
+  "type": "module",
+  "description": "No build step. package.json exists only so Node reads js/ as ES modules when running the tests; the browser needs nothing.",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
